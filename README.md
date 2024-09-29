@@ -1,3 +1,28 @@
+## 使用
+
+### 1. lint-staged
+
+.lintstagedrc.json
+
+```json
+{
+  "*.{ts,tsx}": "npx --no-install tscf --include src/**/*.d.ts --files"
+}
+```
+
+### 2. lefthook
+
+lefthook.yaml
+
+```yaml
+pre-commit:
+  parallel: true
+  commands:
+    tsc:
+      glob: "*.{ts,tsx}"
+      run: npx --no-install tscf {staged_files} --include src/**/*.d.ts
+```
+
 ## 安装
 
 ```sh

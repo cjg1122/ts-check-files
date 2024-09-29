@@ -43,11 +43,19 @@ function tscf(args: {
     "utf8",
   );
 
-  spawnSync("npx", ["tsc", "-p", tsTmpConfigPath], {
-    stdio: "inherit",
-  });
+  const result = spawnSync(
+    "npx",
+    ["--no-install", "tsc", "-p", tsTmpConfigPath],
+    {
+      stdio: "inherit",
+    },
+  );
 
   fs.unlinkSync(tsTmpConfigPath);
+
+  if (result.status !== 0) {
+    process.exit(result.status);
+  }
 }
 
 export default tscf;

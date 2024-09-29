@@ -1,6 +1,6 @@
 {
   "name": "ts-check-files",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "typesctipt check files",
   "type": "module",
   "main": "dist/index.js",
@@ -10,16 +10,39 @@
   },
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup"
+    "build": "tsup",
+    "prepublishOnly": "npm run build"
   },
   "files": ["dist"],
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "typescript",
+    "check",
+    "tsc",
+    "tscf",
+    "ts-check-files",
+    "tscheckfiles",
+    "tsc-files"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cjg1122/ts-check-files"
+  },
+  "author": {
+    "name": "cjg",
+    "url": "https://github.com/cjg1122"
+  },
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cjg1122/ts-check-files/issues"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.9.2",
     "@types/node": "^22.7.4",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
   }
 }
