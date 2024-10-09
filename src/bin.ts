@@ -1,23 +1,24 @@
 #!/usr/bin/env node
 
+import { resolve } from "node:path";
 import tscf from "./index";
-import normalizeToArray from "./normalizeToArray";
+import normalizeToArray from "./normalize-to-array";
 import parsedArgs from "./parse-args";
 
 const args = parsedArgs(process.argv.slice(2));
-const files = [...args._, ...normalizeToArray(args.files)];
-const include = normalizeToArray(args.include);
-const exclude = normalizeToArray(args.exclude);
-const cwd = typeof args.cwd === "string" ? args.cwd : process.cwd();
+const files = [...args._, ...normalizeToArray(args.files)].map((file) =>
+  resolve(file),
+);
+const cwd = typeof args.cwd === "string" ? args.cwd : void 0;
 
-if (files.length === 0) {
-  console.log("tscf: No files to check");
-  process.exit(0);
-}
-
-tscf({
+const [error, message] = await tscf({
   files,
   cwd,
-  include,
-  exclude,
 });
+
+if (error) {
+  console.error(error);
+  process.exit(1);
+}
+
+console.log(message);

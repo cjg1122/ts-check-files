@@ -1,3 +1,7 @@
+# tscf
+
+结合 lint-staged 使用 Typescript Compiler API 对 git 改动的文件进行类型检测
+
 ## 使用
 
 ### 1. lint-staged
@@ -6,7 +10,7 @@
 
 ```json
 {
-  "*.{ts,tsx}": "npx --no-install tscf --include src/**/*.d.ts --files"
+  "*.ts?(x)": "tscf"
 }
 ```
 
@@ -20,7 +24,7 @@ pre-commit:
   commands:
     tsc:
       glob: "*.{ts,tsx}"
-      run: npx --no-install tscf {staged_files} --include src/**/*.d.ts
+      run: npx --no-install tscf {staged_files}
 ```
 
 ## 安装
@@ -34,15 +38,13 @@ npm install ts-check-files -D
 ### 1. 语法
 
 ```
-tscf [<file> <glob> ...] [--files <file> <glob> ...] [--cwd <directory>] [--include <file> <glob> ...] [--exclude <file> <glob> ...]
+tscf [<file> <glob> ...] [--cwd <directory>]
 ```
-
-直接指定的文件跟通过 --files 参数指定文件最后会合并
 
 ### 2. 使用
 
 ```sh
-tscf src/a.ts src/b.ts --include src/**/*.d.ts --exclude src/**/*/test.*
+tscf src/a.ts src/b.ts
 ```
 
 ## nodejs api
@@ -53,9 +55,7 @@ tscf src/a.ts src/b.ts --include src/**/*.d.ts --exclude src/**/*/test.*
 declare function tscf(args: {
   files: string[];
   cwd?: string;
-  include?: string[];
-  exclude?: string[];
-}): void;
+}): Promise<[null, string] | [string, null]>;
 ```
 
 ### 2. 使用
@@ -63,16 +63,15 @@ declare function tscf(args: {
 ```ts
 import tscf from "ts-check-files";
 
-tscf({
-  files: ["a.js", "b.js"],
-  cwd: "./",
-  include: ["src/**/*.d.ts"],
-  exclude: ["src/**/*.test.{js,ts}"],
+const [error, message] = await tscf({
+  files,
+  cwd,
 });
+
+if (error) {
+  console.error(error);
+  process.exit(1);
+}
+
+console.log(message);
 ```
-
-## 建议&说明
-
-1. 建议把 .tsconfig.tmp.json（临时文件） 添加到 .gitignore
-2. --include 如果想直接指定 glob 可以 `--include 'src/**/*.ts'`, 否则终端会返回查寻列表（exclude 同理）
-3. 直接指定文件与 --files 不支持 glob 模式 `tscf '*.ts' --files '*.tsx'`, 可以`tscf *.ts --files *.tsx`
