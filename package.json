@@ -1,6 +1,6 @@
 {
   "name": "ts-check-files",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "typescript check files",
   "type": "module",
   "main": "dist/index.js",
