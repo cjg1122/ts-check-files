@@ -35,8 +35,6 @@ async function tscf(args: {
     ...parsedCommandLine.fileNames.filter((file) => file.endsWith(".d.ts")),
   ];
 
-  console.log(rootNames);
-
   // 创建 TypeScript 程序
   const program = ts.createProgram({
     rootNames,
